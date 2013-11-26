@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var ninjaBlocks = require('ninja-blocks');
-var vars = require('vars.js');
+var vars = require('./vars.js');
 
 var USER_ACCESS_TOKEN = vars.userAccessToken;
 
