@@ -15,7 +15,9 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
       console.log('');
       console.log(device.shortName+' is '+data.DA+'C');
       console.log('');
-      console.log('the data is: '+data);
+      console.log('the data is: ');
+      console.log(data);
+      console.log('');
     })
   })
 });
