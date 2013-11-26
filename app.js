@@ -26,9 +26,9 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
       console.log(timestamp - data.timestamp);
       console.log('');
       console.log('and in seconds: ');
-      console.log((timestamp - data.timestamp) / 100);
+      console.log((timestamp - data.timestamp) / 1000);
       console.log('and in min: ');
-      console.log(((timestamp - data.timestamp) / 100) / 60);
+      console.log(((timestamp - data.timestamp) / 1000) / 60);
     })
   })
 });
