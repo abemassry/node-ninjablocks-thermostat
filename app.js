@@ -18,6 +18,9 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
       console.log('the data is: ');
       console.log(data);
       console.log('');
+      timestamp = new Date().getTime();
+      console.log('the time now is: ');
+      console.log(timestamp);
     })
   })
 });
