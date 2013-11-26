@@ -21,6 +21,14 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
       timestamp = new Date().getTime();
       console.log('the time now is: ');
       console.log(timestamp);
+      console.log('');
+      console.log('the difference is: ');
+      console.log(timestamp - data.timestamp);
+      console.log('');
+      console.log('and in seconds: ');
+      console.log((timestamp - data.timestamp) / 100);
+      console.log('and in min: ');
+      console.log(((timestamp - data.timestamp) / 100) / 60);
     })
   })
 });
