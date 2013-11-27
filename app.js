@@ -22,6 +22,10 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
           var temp_f = (data.DA * (9/5)) + 32;
           console.log('');
           console.log('temp in F is: '+temp_f+'F');
+          // 
+          // 68F min 72F max
+          //
+          if 
         } else {
           console.log("hasn't checked in in over "+MAX_TIME_DELTA+" seconds");
         }
