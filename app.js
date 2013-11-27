@@ -25,6 +25,8 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
           // 
           // 68F min 72F max
           //
+          // 11PM start 6AM end
+          //
           if 
         } else {
           console.log("hasn't checked in in over "+MAX_TIME_DELTA+" seconds");
