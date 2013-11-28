@@ -50,12 +50,15 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                 if (error !== null) {
                   console.log('exec error: '+error);
                 }
+                console.log('set mode to heat');
                 var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
                   if (error !== null) {
                     console.log('exec error: '+error);
                   }
                   var current_temp_nest = Math.round(stdout);
                   var new_temp_nest = current_temp_nest + 1;
+                  console.log('current temp nest: '+current_temp_nest);
+                  console.log('new temp nest: '+new_temp_nest);
                   var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
                     if (error !== null) {
                       console.log('exec error: '+error);
@@ -71,12 +74,15 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                   console.log('exec error: '+error);
                 }
                 if (stdout === 'heat'){
+                  console.log('current mode is heat');
                   var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
                     if (error !== null) {
                       console.log('exec error: '+error);
                     }
                     var current_temp_nest = Math.round(stdout);
                     var new_temp_nest = current_temp_nest - 1;
+                    console.log('current temp nest: '+current_temp_nest);
+                    console.log('new temp nest: '+new_temp_nest);
                     var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
                       if (error !== null) {
                         console.log('exec error: '+error);
@@ -92,12 +98,15 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                   if (error !== null) {
                     console.log('exec error: '+error);
                   }
+                  console.log('switched to air conditioning');
                   var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
                     if (error !== null) {
                       console.log('exec error: '+error);
                     }
                     var current_temp_nest = Math.round(stdout);
                     var new_temp_nest = current_temp_nest - 1;
+                    console.log('current temp nest: '+current_temp_nest);
+                    console.log('new temp nest: '+new_temp_nest);
                     var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
                       if (error !== null) {
                         console.log('exec error: '+error);
