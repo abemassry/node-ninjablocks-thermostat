@@ -1,6 +1,8 @@
 var _ = require('underscore');
 var ninjaBlocks = require('ninja-blocks');
 var vars = require('./vars.js');
+var moment = require('moment');
+
 
 var USER_ACCESS_TOKEN = vars.userAccessToken;
 
@@ -27,7 +29,23 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
           //
           // 11PM start 6AM end
           //
-          if 
+          var now = moment();
+          var hour = now.hours();
+          console.log(hour);
+          if (hour > 22 || hour < 7) {
+            if (temp_f < 68) {
+              // set to heat
+              // check temp and raise by 1 degree
+            } else if(temp > 72) {
+              // check temp and lower by 1 degree
+
+              if (temp > 74) {
+                // switch to air conditioning
+                // check temp and lower by 1 degree
+
+              }
+            }
+          }
         } else {
           console.log("hasn't checked in in over "+MAX_TIME_DELTA+" seconds");
         }
