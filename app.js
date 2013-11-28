@@ -2,16 +2,20 @@ var _ = require('underscore');
 var ninjaBlocks = require('ninja-blocks');
 var vars = require('./vars.js');
 var moment = require('moment');
+var exec = require('child_process').exec;
 
 
 var USER_ACCESS_TOKEN = vars.userAccessToken;
+var PYNEST_COMMAND = vars.pynest_command;
 
 var ninja = ninjaBlocks.app({user_access_token:USER_ACCESS_TOKEN});
 
+// temps get converted to farenheit to compare
+
 var MAX_TIME_DELTA = 180;
 var GUID_1 = '0101';
-var START_TIME = 22;
-var END_TIME = 7;
+var START_TIME = 22; // 11PM or later
+var END_TIME = 7; // 6AM or earlyer
 var LOW_LIMIT_HEAT = 68;
 var HIGH_LIMIT_HEAT = 72;
 var HIGH_LIMIT_AC = 74;
@@ -39,14 +43,68 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
           console.log(hour);
           if (hour > START_TIME || hour < END_TIME) {
             if (temp_f < LOW_LIMIT_HEAT) {
-              // set to heat
+              // switch to heat
               // check temp and raise by 1 degree
+              var child = exec(PYNEST_COMMAND+'mode heat', function(error, stdout, stderr){
+                if (error !== null) {
+                  console.log('exec error: '+error);
+                }
+                var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
+                  if (error !== null) {
+                    console.log('exec error: '+error);
+                  }
+                  var current_temp_nest = stdout;
+                  var new_temp_nest = current_temp_nest + 1;
+                  var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
+                    if (error !== null) {
+                      console.log('exec error: '+error);
+                    }
+
+                  });
+                });
+              });
             } else if(temp > HIGH_LIMIT_HEAT) {
-              // check temp and lower by 1 degree
+              // check mode, if heat lower by 1 degree
+              var child = exec(PYNEST_COMMAND+'curmode', function(error, stdout, stderr){
+                if (error !== null) {
+                  console.log('exec error: '+error);
+                }
+                if (stdout === 'heat'){
+                  var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
+                    if (error !== null) {
+                      console.log('exec error: '+error);
+                    }
+                    var current_temp_nest = stdout;
+                    var new_temp_nest = current_temp_nest - 1;
+                    var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
+                      if (error !== null) {
+                        console.log('exec error: '+error);
+                      }
+                    });
+                  });
+                }
+              });
 
               if (temp > HIGH_LIMIT_AC) {
                 // switch to air conditioning
-                // check temp and lower by 1 degree
+                var child = exec(PYNEST_COMMAND+'mode cool', function(error, stdout, stderr){
+                  if (error !== null) {
+                    console.log('exec error: '+error);
+                  }
+                  var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
+                    if (error !== null) {
+                      console.log('exec error: '+error);
+                    }
+                    var current_temp_nest = stdout;
+                    var new_temp_nest = current_temp_nest - 1;
+                    var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
+                      if (error !== null) {
+                        console.log('exec error: '+error);
+                      }
+
+                    });
+                  });
+                });
 
               }
             }
