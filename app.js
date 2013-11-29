@@ -3,10 +3,22 @@ var ninjaBlocks = require('ninja-blocks');
 var vars = require('./vars.js');
 var moment = require('moment');
 var exec = require('child_process').exec;
-
+var nodemailer = require('nodemailer');
 
 var USER_ACCESS_TOKEN = vars.userAccessToken;
 var PYNEST_COMMAND = vars.pynest_command;
+var EMAIL_TRANSPORT = vars.email_transport;
+var EMAIL_SERVICE = vars.email_service;
+var EMAIL_USER = vars.email_user;
+var EMAIL_PASS = vars.email_pass;
+
+var transport = nodemailer.createTransport(EMAIL_TRANSPORT, {
+  service: EMAIL_SERVICE,
+  auth: {
+    user: EMAIL_USER,
+    pass: EMAIL_PASS
+  }
+});
 
 var ninja = ninjaBlocks.app({user_access_token:USER_ACCESS_TOKEN});
 
@@ -63,6 +75,19 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                     if (error !== null) {
                       console.log('exec error: '+error);
                     }
+                    var mailOptions = {
+                      from: EMAIL_USER,
+                      to: EMAIL_USER,
+                      subject: "Node ninjablocks temp update",
+                      text: 'Set Mode to Heat\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                    };
+                    transport.sendMail(mailOptions, function(error, response){
+                      if(error) {
+                        console.log(error);
+                      } else {
+                        console.log('email sent');
+                      }
+                    }); //end of transport mail
 
                   });
                 });
@@ -87,6 +112,19 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                       if (error !== null) {
                         console.log('exec error: '+error);
                       }
+                      var mailOptions = {
+                        from: EMAIL_USER,
+                        to: EMAIL_USER,
+                        subject: "Node ninjablocks temp update",
+                        text: 'Current mode is heat\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                      };
+                      transport.sendMail(mailOptions, function(error, response){
+                        if(error) {
+                          console.log(error);
+                        } else {
+                          console.log('email sent');
+                        }
+                      }); //end of transport mail
                     });
                   });
                 }
@@ -111,6 +149,19 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                       if (error !== null) {
                         console.log('exec error: '+error);
                       }
+                      var mailOptions = {
+                        from: EMAIL_USER,
+                        to: EMAIL_USER,
+                        subject: "Node ninjablocks temp update",
+                        text: 'Set Mode to AC\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                      };
+                      transport.sendMail(mailOptions, function(error, response){
+                        if(error) {
+                          console.log(error);
+                        } else {
+                          console.log('email sent');
+                        }
+                      }); //end of transport mail
 
                     });
                   });
