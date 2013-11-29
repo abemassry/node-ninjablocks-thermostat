@@ -18,7 +18,7 @@ var START_TIME = 22; // 11PM or later
 var END_TIME = 7; // 6AM or earlier
 var LOW_LIMIT_HEAT = 68; // 68
 var HIGH_LIMIT_HEAT = 72; // 72
-var HIGH_LIMIT_AC = 74; // 74
+var HIGH_LIMIT_AC = 75; // 75
 
 // Get the most recent temperature reading from all temperature sensors
 // then analyze and get a single one
