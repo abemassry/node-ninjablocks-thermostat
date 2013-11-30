@@ -79,7 +79,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                       from: EMAIL_USER,
                       to: EMAIL_USER,
                       subject: "Node ninjablocks temp update",
-                      text: 'Set Mode to Heat\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                      text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to Heat\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
                     };
                     transport.sendMail(mailOptions, function(error, response){
                       if(error) {
@@ -92,7 +92,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                   });
                 });
               });
-            } else if(temp_f > HIGH_LIMIT_HEAT && temp_f < HIGH_LIMIT_AC) {
+            } else if(temp_f > HIGH_LIMIT_HEAT && temp_f <= HIGH_LIMIT_AC) {
               // check mode, if heat lower by 1 degree
               var child = exec(PYNEST_COMMAND+'curmode', function(error, stdout, stderr){
                 if (error !== null) {
@@ -116,7 +116,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                         from: EMAIL_USER,
                         to: EMAIL_USER,
                         subject: "Node ninjablocks temp update",
-                        text: 'Current mode is heat\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                        text: 'Ninjablocks temp: '+temp_f+'\nCurrent mode is heat\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
                       };
                       transport.sendMail(mailOptions, function(error, response){
                         if(error) {
@@ -130,7 +130,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                 }
               });
 
-            } else if (temp_f >= HIGH_LIMIT_AC) {
+            } else if (temp_f > HIGH_LIMIT_AC) {
               // switch to air conditioning
               var child = exec(PYNEST_COMMAND+'mode cool', function(error, stdout, stderr){
                 if (error !== null) {
@@ -153,7 +153,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                       from: EMAIL_USER,
                       to: EMAIL_USER,
                       subject: "Node ninjablocks temp update",
-                      text: 'Set Mode to AC\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                      text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to AC\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
                     };
                     transport.sendMail(mailOptions, function(error, response){
                       if(error) {
