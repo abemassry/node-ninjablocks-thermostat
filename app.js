@@ -98,7 +98,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                 if (error !== null) {
                   console.log('exec error: '+error);
                 }
-                if (stdout === 'heat'){
+                if (stdout == 'heat'){
                   console.log('current mode is heat');
                   var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
                     if (error !== null) {
@@ -132,11 +132,12 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
 
             } else if (temp_f > HIGH_LIMIT_AC) {
               // switch to air conditioning
-              var child = exec(PYNEST_COMMAND+'mode cool', function(error, stdout, stderr){
-                if (error !== null) {
-                  console.log('exec error: '+error);
-                }
+              //var child = exec(PYNEST_COMMAND+'mode cool', function(error, stdout, stderr){
+              //  if (error !== null) {
+              //    console.log('exec error: '+error);
+              //  }
                 console.log('switched to air conditioning');
+                console.log('disabled');
                 var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
                   if (error !== null) {
                     console.log('exec error: '+error);
@@ -153,7 +154,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                       from: EMAIL_USER,
                       to: EMAIL_USER,
                       subject: "Node ninjablocks temp update",
-                      text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to AC\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                      text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to AC\ndisabled\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
                     };
                     transport.sendMail(mailOptions, function(error, response){
                       if(error) {
@@ -165,7 +166,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
 
                   });
                 });
-              });
+              //});
 
             }
             // here
