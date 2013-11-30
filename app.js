@@ -26,7 +26,7 @@ var ninja = ninjaBlocks.app({user_access_token:USER_ACCESS_TOKEN});
 
 var MAX_TIME_DELTA = 180;
 var GUID_1 = '0101';
-var START_TIME = 22; // 11PM or later
+var START_TIME = 22; // 2200 11PM or later
 var END_TIME = 7; // 6AM or earlier
 var LOW_LIMIT_HEAT = 68; // 68
 var HIGH_LIMIT_HEAT = 72; // 72
@@ -92,7 +92,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                   });
                 });
               });
-            } else if(temp_f > HIGH_LIMIT_HEAT) {
+            } else if(temp_f > HIGH_LIMIT_HEAT && temp_f < HIGH_LIMIT_AC) {
               // check mode, if heat lower by 1 degree
               var child = exec(PYNEST_COMMAND+'curmode', function(error, stdout, stderr){
                 if (error !== null) {
@@ -130,45 +130,45 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                 }
               });
 
-              if (temp_f > HIGH_LIMIT_AC) {
-                // switch to air conditioning
-                var child = exec(PYNEST_COMMAND+'mode cool', function(error, stdout, stderr){
+            } else if (temp_f >= HIGH_LIMIT_AC) {
+              // switch to air conditioning
+              var child = exec(PYNEST_COMMAND+'mode cool', function(error, stdout, stderr){
+                if (error !== null) {
+                  console.log('exec error: '+error);
+                }
+                console.log('switched to air conditioning');
+                var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
                   if (error !== null) {
                     console.log('exec error: '+error);
                   }
-                  console.log('switched to air conditioning');
-                  var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
+                  var current_temp_nest = Math.round(stdout);
+                  var new_temp_nest = current_temp_nest - 1;
+                  console.log('current temp nest: '+current_temp_nest);
+                  console.log('new temp nest: '+new_temp_nest);
+                  var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
                     if (error !== null) {
                       console.log('exec error: '+error);
                     }
-                    var current_temp_nest = Math.round(stdout);
-                    var new_temp_nest = current_temp_nest - 1;
-                    console.log('current temp nest: '+current_temp_nest);
-                    console.log('new temp nest: '+new_temp_nest);
-                    var child = exec(PYNEST_COMMAND+'temp '+new_temp_nest, function(error, stdout, stderr){
-                      if (error !== null) {
-                        console.log('exec error: '+error);
+                    var mailOptions = {
+                      from: EMAIL_USER,
+                      to: EMAIL_USER,
+                      subject: "Node ninjablocks temp update",
+                      text: 'Set Mode to AC\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
+                    };
+                    transport.sendMail(mailOptions, function(error, response){
+                      if(error) {
+                        console.log(error);
+                      } else {
+                        console.log('email sent');
                       }
-                      var mailOptions = {
-                        from: EMAIL_USER,
-                        to: EMAIL_USER,
-                        subject: "Node ninjablocks temp update",
-                        text: 'Set Mode to AC\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
-                      };
-                      transport.sendMail(mailOptions, function(error, response){
-                        if(error) {
-                          console.log(error);
-                        } else {
-                          console.log('email sent');
-                        }
-                      }); //end of transport mail
+                    }); //end of transport mail
 
-                    });
                   });
                 });
+              });
 
-              }
             }
+            // here
           }
         } else {
           console.log("hasn't checked in in over "+MAX_TIME_DELTA+" seconds");
