@@ -63,7 +63,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                   console.log('exec error: '+error);
                 }
                 console.log('set mode to heat');
-                var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
+                var child = exec(PYNEST_COMMAND+'curtarget', function(error, stdout, stderr){
                   if (error !== null) {
                     console.log('exec error: '+error);
                   }
@@ -100,7 +100,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                 }
                 if (stdout == 'heat'){
                   console.log('current mode is heat');
-                  var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
+                  var child = exec(PYNEST_COMMAND+'curtarget', function(error, stdout, stderr){
                     if (error !== null) {
                       console.log('exec error: '+error);
                     }
@@ -138,7 +138,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
               //  }
                 console.log('switched to air conditioning');
                 console.log('disabled');
-                var child = exec(PYNEST_COMMAND+'curtemp', function(error, stdout, stderr){
+                var child = exec(PYNEST_COMMAND+'curtarget', function(error, stdout, stderr){
                   if (error !== null) {
                     console.log('exec error: '+error);
                   }
