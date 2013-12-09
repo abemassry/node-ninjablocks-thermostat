@@ -63,6 +63,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                   console.log('exec error: '+error);
                 }
                 console.log('set mode to heat');
+                // curtarget is the temperature the nest is currently set to
                 var child = exec(PYNEST_COMMAND+'curtarget', function(error, stdout, stderr){
                   if (error !== null) {
                     console.log('exec error: '+error);
