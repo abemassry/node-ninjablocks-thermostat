@@ -93,6 +93,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                   });
                 });
               });
+            // this block of code never gets called, need to investigate
             } else if(temp_f > HIGH_LIMIT_HEAT && temp_f <= HIGH_LIMIT_AC) {
               // check mode, if heat lower by 1 degree
               var child = exec(PYNEST_COMMAND+'curmode', function(error, stdout, stderr){
