@@ -30,7 +30,7 @@ var START_TIME = 22; // 2200 11PM or later
 var END_TIME = 6; // 5AM or earlier
 var LOW_LIMIT_HEAT = 68; // 68
 var HIGH_LIMIT_HEAT = 72; // 72
-var HIGH_LIMIT_AC = 76; // 76
+var HIGH_LIMIT_AC = 73; // 76
 
 // Get the most recent temperature reading from all temperature sensors
 // then analyze and get a single one
@@ -152,26 +152,44 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                     if (error !== null) {
                       console.log('exec error: '+error);
                     }
-                    var mailOptions = {
-                      from: EMAIL_USER,
-                      to: EMAIL_USER,
-                      subject: "Node ninjablocks temp update",
-                      text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to AC\ndisabled\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest
-                    };
-                    transport.sendMail(mailOptions, function(error, response){
-                      if(error) {
-                        console.log(error);
-                      } else {
-                        console.log('email sent');
+                    var child = exec(PYNEST_COMMAND+'fan on', function(error, stdout, stderr){
+                      if (error !== null) {
+                        console.log('exec error: '+error);
                       }
-                    }); //end of transport mail
-
+                      var mailOptions = {
+                        from: EMAIL_USER,
+                        to: EMAIL_USER,
+                        subject: "Node ninjablocks temp update",
+                        text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to AC\ndisabled\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest+'\nset fan to on'
+                      };
+                      transport.sendMail(mailOptions, function(error, response){
+                        if(error) {
+                          console.log(error);
+                        } else {
+                          console.log('email sent');
+                        }
+                      }); //end of transport mail
+                    });
                   });
                 });
               //});
 
+            } else {
+              var child = exec(PYNEST_COMMAND+'fan auto', function(error, stdout, stderr){
+                if (error !== null) {
+                  console.log('exec error: '+error);
+                }
+              });
+            
             }
             // here
+          } else {
+            var child = exec(PYNEST_COMMAND+'fan auto', function(error, stdout, stderr){
+              if (error !== null) {
+                console.log('exec error: '+error);
+              }
+            });
+
           }
         } else {
           console.log("hasn't checked in in over "+MAX_TIME_DELTA+" seconds");
