@@ -156,7 +156,7 @@ ninja.devices({ device_type: 'temperature' }, function(err, devices) {
                       from: EMAIL_USER,
                       to: EMAIL_USER,
                       subject: "Node ninjablocks temp update",
-                      text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to AC\ndisabled\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest+'\nset fan to on'
+                      text: 'Ninjablocks temp: '+temp_f+'\nSet Mode to AC\ndisabled\ncurrent temp nest: '+current_temp_nest+'\nnew temp nest: '+new_temp_nest+'\n'
                     };
                     transport.sendMail(mailOptions, function(error, response){
                       if(error) {
